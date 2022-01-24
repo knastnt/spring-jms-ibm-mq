@@ -7,8 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MessageConverter;
+
+import javax.jms.ConnectionFactory;
 
 @Slf4j
 @Configuration
@@ -19,6 +22,7 @@ public class IbmMqConfiguration {
      * @return
      */
     @Bean
+    @Profile("!test")
     @ConfigurationProperties(prefix = "client.publ.jms")
     public MQConfigurationProperties configProperties() {
         return new MQConfigurationProperties();
@@ -30,7 +34,8 @@ public class IbmMqConfiguration {
      * @return
      */
     @Bean
-    public MQConnectionFactory connectionFactory(MQConfigurationProperties configProperties) {
+    @Profile("!test")
+    public ConnectionFactory connectionFactory(MQConfigurationProperties configProperties) {
         return new MQConnectionFactoryFactory(configProperties, null)
                 .createConnectionFactory(MQConnectionFactory.class);
     }
@@ -41,7 +46,7 @@ public class IbmMqConfiguration {
      * @return
      */
     @Bean
-    public DefaultJmsListenerContainerFactory jmsContainer(MQConnectionFactory connectionFactory) {
+    public DefaultJmsListenerContainerFactory jmsContainer(ConnectionFactory connectionFactory) {
 
         DefaultJmsListenerContainerFactory listenerContainer = new DefaultJmsListenerContainerFactory();
         //Включаем использование паттерна publisher/subscriber
