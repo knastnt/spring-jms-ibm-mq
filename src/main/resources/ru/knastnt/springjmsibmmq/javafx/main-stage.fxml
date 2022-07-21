@@ -3,11 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="ru.knastnt.springjmsibmmq.javafx.MyController"
-      prefHeight="100.0" prefWidth="350.0" spacing="10" alignment="CENTER">
+<VBox alignment="CENTER" prefHeight="221.0" prefWidth="350.0" spacing="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.knastnt.springjmsibmmq.javafx.MyController">
+   <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" />
 
-    <Label fx:id="weatherLabel"/>
+    <Label fx:id="label" />
     <Button onAction="#loadWeatherForecast">Get weather</Button>
 </VBox>
