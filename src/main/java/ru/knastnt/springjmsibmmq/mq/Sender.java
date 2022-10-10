@@ -12,7 +12,7 @@ import javax.jms.ConnectionFactory;
 public class Sender {
     @Autowired
     private ConnectionFactory connectionFactory;
-    @Value("${client.publ.jms.topic-name}")
+    @Value("${client.publ.jms.queue-name}")
     private String dest;
 
     private JmsTemplate jmsTemplate;

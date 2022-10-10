@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.connection.JmsTransactionManager;
 import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.jms.ConnectionFactory;
 
@@ -46,18 +48,26 @@ public class IbmMqConfiguration {
      * @return
      */
     @Bean
-    public DefaultJmsListenerContainerFactory jmsContainer(ConnectionFactory connectionFactory) {
+    public DefaultJmsListenerContainerFactory jmsContainer(ConnectionFactory connectionFactory, PlatformTransactionManager transactionManager) {
 
         DefaultJmsListenerContainerFactory listenerContainer = new DefaultJmsListenerContainerFactory();
         //Включаем использование паттерна publisher/subscriber
-        listenerContainer.setPubSubDomain(true);
+        listenerContainer.setPubSubDomain(false);
         //Устанавливаем connectionFactory
         listenerContainer.setConnectionFactory(connectionFactory);
         //Обозначаем логику обработки ошибок
         listenerContainer.setErrorHandler(error -> log.error("Error!!! has occurred in jms listener", error));
         //Можно указать конвертер для автоматического биндинга сообщения в нужный формат, но пока сделаем без него
         //listenerContainer.setMessageConverter(messageConverter);
+        listenerContainer.setTransactionManager(transactionManager);
 
         return listenerContainer;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(ConnectionFactory connectionFactory) {
+        JmsTransactionManager transactionManager = new JmsTransactionManager();
+        transactionManager.setConnectionFactory(connectionFactory);
+        return transactionManager;
     }
 }

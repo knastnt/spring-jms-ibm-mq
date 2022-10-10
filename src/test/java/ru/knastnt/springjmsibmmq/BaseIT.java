@@ -24,7 +24,6 @@ public class BaseIT {
         @Bean //Создаём темплейт, чтобы слать сообщения в топик
         public JmsTemplate topicJmsTemplate(ConnectionFactory connectionFactory){
             JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
-            jmsTemplate.setPubSubDomain(true);//говорим что будем работать в режиме Publisher/Subscriber
             return jmsTemplate;
         }
 
@@ -33,7 +32,7 @@ public class BaseIT {
     @Autowired
     private JmsTemplate topicJmsTemplate;
 
-    @Value("${client.publ.jms.topic-name}")
+    @Value("${client.publ.jms.queue-name}")
     private String topicName;
 
     //Метод для простой отправки сообщения в топик
